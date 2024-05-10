@@ -1,6 +1,5 @@
 import { verify } from "jsonwebtoken";
 import User from "../models/User";
-
 export const authGuard = async (req, res, next) => {
   if (
     req.headers.authorization &&
