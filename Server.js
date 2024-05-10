@@ -1,28 +1,30 @@
-import express from "express";   
+import express from "express";
 
 import dotenv from "dotenv";
 
 import connectDB from "./config/db";
 
-import {errorResponsiveHandler, invalidPathHandler} from "./middleware/errorHandler";
-
+import {
+  errorResponsiveHandler,
+  invalidPathHandler,
+} from "./middleware/errorHandler";
 
 // Routes
-import userRoutes from './routes/userRoutes';
+import userRoutes from "./routes/userRoutes";
 
 dotenv.config();
 connectDB();
-const app =express ();
-app.use(express.json()) 
+const app = express();
+app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("Server is running...");
-  });
+  res.send("Server is running...");
+});
 
-  app.use('/api/users', userRoutes);
+app.use("/api/users", userRoutes);
 app.use(invalidPathHandler);
-  app.use(errorResponsiveHandler);
+app.use(errorResponsiveHandler);
 
-  const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-  app.listen(PORT, () => console.log (`server is running on port ${PORT}`));
+app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
