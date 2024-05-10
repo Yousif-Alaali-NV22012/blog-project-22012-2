@@ -11,6 +11,7 @@ import {
 
 import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use("/api/users", userRoutes);
 app.use(invalidPathHandler);
 app.use(errorResponsiveHandler);
 app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 const PORT = process.env.PORT || 5000;
 

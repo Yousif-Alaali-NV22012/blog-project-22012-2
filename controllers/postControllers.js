@@ -97,4 +97,58 @@ const deletePost = async (req, res, next) => {
     }
   };
   
-  export { createPost, updatePost, deletePost };
+  const getPost = async (req, res, next) => {
+    try {
+      const post = await Post.findOne({ slug: req.params.slug }).populate([
+        {
+          path: "user",
+          select: ["avatar", "name"],
+        },
+        {
+          path: "comments",
+          match: {
+            check: true,
+            parent: null,
+          },
+          populate: [
+            {
+              path: "user",
+              select: ["avatar", "name"],
+            },
+            {
+              path: "replies",
+              match: {
+                check: true,
+              },
+            },
+          ],
+        },
+      ]);
+  
+      if (!post) {
+        const error = new Error("Post was not found");
+        return next(error);
+      }
+  
+      return res.json(post);
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  const getAllPosts = async (req, res, next) => {
+    try {
+      const posts = await Post.find({}).populate([
+        {
+          path: "user",
+          select: ["avatar", "name", "verified"],
+        },
+      ]);
+  
+      res.json(posts);
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  export { createPost, updatePost, deletePost, getPost, getAllPosts };
